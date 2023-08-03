@@ -17,7 +17,7 @@ def index_faces(bucket, key):
         Image={"S3Object":
                {"Bucket": bucket,
                 "Name": key}},
-                CoellectionId="family_collection")
+                CollectionId="family_collection")
     return response
 
 def update_index(tableName, faceId, fullName):
@@ -35,18 +35,18 @@ def lambda_handler(event, context):
 
     bucket = event['Records'][0]['s3']['bucket']['name']
     print(bucket)
-    key = event['Records'][0]['object']['key']
+    key = event['Records'][0]['s3']['object']['key']
     print(key)
     
     try:
         
         response = index_faces(bucket, key)
 
-        if response['ResponseMetaData']['HTTPStatusCode'] == 200:
+        if response['ResponseMetadata']['HTTPStatusCode'] == 200:
             faceId = response['FaceRecords'][0]['Face']['FaceId']
 
             ret = s3.head_object(Bucket=bucket,Key=key)
-            personFullName = ret['MetaData']['fullname']
+            personFullName = ret['Metadata']['fullname']
 
             update_index('family_collection',faceId,personFullName)
 
