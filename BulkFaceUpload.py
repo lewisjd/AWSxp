@@ -10,7 +10,8 @@ images =  [('1.JPEG', 'Lionel Messi'),
 
 for image in images:
     file = open(image[0],'rb')
-    object = s3.Object('rekognitionfacecollection','index/'+ image[0])
+    object = s3.Object('rekognitionfacecollection','index2/'+ image[0])
     ret = object.put(Body=file,
                      Metadata={'FullName':image[1]}
                      )
+           
